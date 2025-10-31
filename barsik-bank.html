@@ -3,10 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Барсик-Банк | Платежная система</title>
-    <!-- Разрешения для NFC -->
-    <meta http-equiv="Permissions-Policy" content="nfc=(self)">
-    <link rel="manifest" href="manifest.json">
+    <title>Барсик-Банк | Платежный терминал</title>
     <style>
         * {
             margin: 0;
@@ -15,276 +12,312 @@
         }
 
         body {
-            font-family: Arial, sans-serif;
-            background: #f5f5f5;
-            padding: 20px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
         }
 
-        /* Интерфейс для КОМПЬЮТЕРА */
-        .computer-interface {
-            max-width: 1000px;
-            margin: 0 auto;
-            display: none;
-        }
-        
-        .header {
-            background: #1e3a8a;
-            color: white;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-        
-        .card-creator {
+        .terminal-container {
             background: white;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        
-        .card-creator input {
-            padding: 10px;
-            margin: 10px 0;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
             width: 100%;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
-        
-        .card-creator button {
-            background: #1e3a8a;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            width: 100%;
+            max-width: 400px;
         }
 
-        /* Интерфейс для ТЕЛЕФОНА */
-        .phone-interface {
-            display: none;
-            max-width: 400px;
-            margin: 0 auto;
-        }
-        
-        .terminal {
-            background: #1a1a1a;
-            color: #00ff00;
-            padding: 30px 20px;
-            border-radius: 15px;
-            font-family: 'Courier New', monospace;
+        .terminal-header {
+            background: #2c3e50;
+            color: white;
+            padding: 25px 20px;
             text-align: center;
-            min-height: 400px;
+        }
+
+        .terminal-header h1 {
+            font-size: 1.5em;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .bank-name {
+            font-size: 0.9em;
+            opacity: 0.8;
+        }
+
+        .terminal-body {
+            padding: 30px 25px;
+        }
+
+        .status-display {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            margin-bottom: 25px;
+            border: 2px solid #e9ecef;
+        }
+
+        .amount {
+            font-size: 2.8em;
+            font-weight: 700;
+            color: #2c3e50;
+            margin: 15px 0;
+        }
+
+        .status-message {
+            font-size: 1.1em;
+            color: #6c757d;
+            margin-bottom: 10px;
+        }
+
+        .button-group {
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
+            gap: 12px;
         }
-        
-        .terminal h2 {
-            margin-bottom: 30px;
-            font-size: 1.5em;
-        }
-        
-        .amount {
-            font-size: 2.5em;
-            font-weight: bold;
-            margin: 20px 0;
-        }
-        
-        .terminal button {
-            background: #00ff00;
-            color: black;
+
+        .btn {
+            padding: 18px;
             border: none;
-            padding: 15px 30px;
-            border-radius: 25px;
-            font-size: 1.2em;
-            font-weight: bold;
+            border-radius: 12px;
+            font-size: 1.1em;
+            font-weight: 600;
             cursor: pointer;
-            margin: 10px 0;
-            width: 100%;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
         }
-        
-        .scanning {
-            animation: pulse 1.5s infinite;
-            font-size: 1.2em;
-            margin: 20px 0;
+
+        .btn-primary {
+            background: #3498db;
+            color: white;
         }
-        
-        .success {
-            color: #00ff00;
-            font-size: 1.3em;
-            margin: 20px 0;
+
+        .btn-primary:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
         }
-        
-        .error {
-            color: #ff4444;
-            margin: 10px 0;
+
+        .btn-success {
+            background: #27ae60;
+            color: white;
         }
-        
-        #paymentLog {
-            margin-top: 20px;
+
+        .btn-success:hover {
+            background: #219a52;
+            transform: translateY(-2px);
+        }
+
+        .btn-warning {
+            background: #f39c12;
+            color: white;
+        }
+
+        .btn-warning:hover {
+            background: #e67e22;
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid #3498db;
+            color: #3498db;
+        }
+
+        .btn-outline:hover {
+            background: #3498db;
+            color: white;
+        }
+
+        .transaction-log {
+            margin-top: 25px;
+            border-top: 1px solid #e9ecef;
+            padding-top: 20px;
+        }
+
+        .transaction-log h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .transaction-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #f8f9fa;
+        }
+
+        .transaction-amount {
+            font-weight: 600;
+            color: #27ae60;
+        }
+
+        .transaction-time {
+            color: #6c757d;
             font-size: 0.9em;
-            text-align: left;
-            max-height: 150px;
-            overflow-y: auto;
         }
-        
+
+        .nfc-animation {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            background: #3498db;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: pulse 2s infinite;
+            color: white;
+            font-size: 2em;
+        }
+
         @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.5; }
-            100% { opacity: 1; }
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(52, 152, 219, 0.7); }
+            70% { transform: scale(1.05); box-shadow: 0 0 0 15px rgba(52, 152, 219, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(52, 152, 219, 0); }
+        }
+
+        .error-message {
+            background: #e74c3c;
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            text-align: center;
+        }
+
+        .instructions {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+            font-size: 0.9em;
+            color: #856404;
         }
     </style>
 </head>
 <body>
-    <!-- КОМПЬЮТЕРНЫЙ интерфейс -->
-    <div class="computer-interface" id="computerInterface">
-        <div class="header">
-            <h1>🏦 Барсик-Банк (Админ-панель)</h1>
-            <p>Создавайте карты и управляйте платежами</p>
+    <div class="terminal-container">
+        <div class="terminal-header">
+            <h1>🏦 Барсик-Банк</h1>
+            <div class="bank-name">Платежный терминал</div>
         </div>
-        
-        <div class="card-creator">
-            <h2>🎨 Создать новую карту</h2>
-            <input type="text" id="cardName" placeholder="Название карты">
-            <button onclick="createCard()">Создать карту</button>
-            <div id="cardsList"></div>
-        </div>
-        
-        <div class="card-creator">
-            <h2>📋 История операций</h2>
-            <div id="transactionsList"></div>
-        </div>
-    </div>
 
-    <!-- ТЕЛЕФОННЫЙ интерфейс (терминал) -->
-    <div class="phone-interface" id="phoneInterface">
-        <div class="terminal">
-            <h2>💳 Терминал Барсик-Банка</h2>
-            <div id="terminalDisplay">
-                <p>Готов к работе</p>
-                <p class="amount">0.00 ₽</p>
+        <div class="terminal-body">
+            <div class="status-display">
+                <div id="statusIcon" class="nfc-animation">💳</div>
+                <div id="statusMessage" class="status-message">Готов к работе</div>
+                <div id="amountDisplay" class="amount">0.00 ₽</div>
             </div>
-            <button onclick="startPayment()">💸 Начать прием платежа</button>
-            <div id="paymentLog"></div>
+
+            <div class="button-group">
+                <button id="startPaymentBtn" class="btn btn-primary" onclick="startPayment()">
+                    💸 Начать прием платежа
+                </button>
+                <button id="nfcScanBtn" class="btn btn-success" onclick="startNFCScan()" style="display: none;">
+                    📱 Сканировать NFC
+                </button>
+                <button id="testPaymentBtn" class="btn btn-warning" onclick="simulatePayment()">
+                    🎮 Тестовый платеж
+                </button>
+                <button id="resetBtn" class="btn btn-outline" onclick="resetTerminal()" style="display: none;">
+                    🔄 Новый платеж
+                </button>
+            </div>
+
+            <div id="errorContainer" style="display: none;"></div>
+
+            <div class="instructions" id="nfcInstructions" style="display: none;">
+                <strong>Как использовать NFC:</strong><br>
+                1. Нажмите "Сканировать NFC"<br>
+                2. Разрешите доступ к NFC когда браузер запросит<br>
+                3. Поднесите NFC метку к телефону
+            </div>
+
+            <div class="transaction-log">
+                <h3>История операций</h3>
+                <div id="paymentLog"></div>
+            </div>
         </div>
     </div>
 
     <script>
-        // Определяем устройство при загрузке
+        let nfcReader = null;
+        let currentAmount = 100.00;
+
+        // Проверяем устройство при загрузке
         function checkDevice() {
             const isPhone = /Android|iPhone|iPad/i.test(navigator.userAgent);
-            
-            if (isPhone) {
-                document.getElementById('computerInterface').style.display = 'none';
-                document.getElementById('phoneInterface').style.display = 'block';
-                console.log('Запущен режим ТЕРМИНАЛА на телефоне');
-                initNFC(); // Инициализируем NFC для телефона
-            } else {
-                document.getElementById('computerInterface').style.display = 'block';
-                document.getElementById('phoneInterface').style.display = 'none';
-                console.log('Запущен режим АДМИНА на компьютере');
+            if (!isPhone) {
+                showError('Пожалуйста, откройте эту страницу на телефоне для работы терминала');
             }
+            initNFC();
         }
-
-        // Функции для КОМПЬЮТЕРА
-        function createCard() {
-            const cardName = document.getElementById('cardName').value;
-            if (!cardName) return;
-            
-            alert('Карта "' + cardName + '" создана!');
-            document.getElementById('cardName').value = '';
-        }
-
-        // Функции для ТЕЛЕФОНА с NFC
-        let nfcReader = null;
 
         async function initNFC() {
-            // Проверяем поддержку Web NFC
             if (!('NDEFReader' in window)) {
-                document.getElementById('terminalDisplay').innerHTML = 
-                    '<p class="error">❌ Web NFC не поддерживается</p>' +
-                    '<p>Используйте Chrome 89+ на Android</p>' +
-                    '<p>Или включите флаг: chrome://flags/#enable-experimental-web-platform-features</p>';
+                document.getElementById('nfcInstructions').style.display = 'block';
                 return;
             }
             
             try {
                 nfcReader = new NDEFReader();
-                document.getElementById('terminalDisplay').innerHTML = 
-                    '<p>✅ NFC готов к работе</p>' +
-                    '<p class="amount">0.00 ₽</p>' +
-                    '<button onclick="startNFCScan()">🔍 Запустить NFC сканер</button>';
+                console.log('NFC инициализирован');
             } catch (error) {
-                console.error('Ошибка NFC:', error);
-                document.getElementById('terminalDisplay').innerHTML = 
-                    '<p class="error">❌ Ошибка NFC</p>' +
-                    '<p>' + error.message + '</p>';
+                console.log('NFC не доступен:', error);
             }
         }
 
-        async function startPayment() {
-            document.getElementById('terminalDisplay').innerHTML = 
-                '<p>💳 Настройка платежа</p>' +
-                '<p class="amount">100.00 ₽</p>' +
-                '<button onclick="startNFCScan()">🔍 Сканировать NFC метку</button>' +
-                '<button onclick="simulatePayment()" style="background: #ff9900;">🎮 Тестовый платеж</button>';
+        function startPayment() {
+            currentAmount = 100.00;
+            updateDisplay('💳', 'Готов к сканированию', currentAmount.toFixed(2) + ' ₽');
+            document.getElementById('startPaymentBtn').style.display = 'none';
+            document.getElementById('nfcScanBtn').style.display = 'flex';
+            document.getElementById('testPaymentBtn').style.display = 'flex';
+            document.getElementById('nfcInstructions').style.display = 'block';
+            hideError();
         }
 
         async function startNFCScan() {
             if (!nfcReader) {
-                alert('NFC не инициализирован');
+                showError('NFC не поддерживается вашим браузером. Используйте Chrome на Android.');
                 return;
             }
+
+            updateDisplay('📱', 'Приложите NFC метку...', currentAmount.toFixed(2) + ' ₽');
             
             try {
-                document.getElementById('terminalDisplay').innerHTML = 
-                    '<p>📱 Приложите NFC метку</p>' +
-                    '<p class="amount">100.00 ₽</p>' +
-                    '<div class="scanning">⏳ Сканирование...</div>' +
-                    '<button onclick="resetTerminal()">❌ Отмена</button>';
-                
-                // Запрашиваем разрешение
                 await nfcReader.scan();
                 
                 nfcReader.onreading = event => {
-                    console.log('NFC метка обнаружена!', event);
-                    const message = event.message;
-                    let cardData = 'NFC метка';
-                    
-                    if (message.records && message.records.length > 0) {
-                        const record = message.records[0];
-                        if (record.recordType === "text") {
-                            const textDecoder = new TextDecoder(record.encoding);
-                            cardData = textDecoder.decode(record.data);
-                        } else if (record.recordType === "url") {
-                            const textDecoder = new TextDecoder();
-                            cardData = textDecoder.decode(record.data);
-                        }
-                    }
-                    
-                    // Симуляция успешного платежа
-                    processPayment(cardData);
+                    console.log('NFC метка обнаружена');
+                    processPayment('NFC Карта ****' + Math.floor(Math.random() * 10000));
                 };
                 
-                nfcReader.onreadingerror = (error) => {
-                    console.error('Ошибка чтения NFC:', error);
-                    document.getElementById('terminalDisplay').innerHTML = 
-                        '<p class="error">❌ Ошибка чтения NFC</p>' +
-                        '<p>Попробуйте другую метку</p>' +
-                        '<button onclick="startNFCScan()">🔄 Повторить</button>';
+                nfcReader.onreadingerror = event => {
+                    console.error('Ошибка NFC:', event);
+                    showError('Ошибка чтения NFC. Проверьте метку и попробуйте снова.');
                 };
                 
             } catch (error) {
-                console.error('Ошибка сканирования NFC:', error);
-                document.getElementById('terminalDisplay').innerHTML = 
-                    '<p class="error">❌ Ошибка: ' + error.message + '</p>' +
-                    '<p>Разрешите доступ к NFC в настройках браузера</p>' +
-                    '<button onclick="startNFCScan()">🔄 Повторить</button>' +
-                    '<button onclick="simulatePayment()">🎮 Тестовый платеж</button>';
+                console.error('Ошибка NFC:', error);
+                if (error.name === 'NotAllowedError') {
+                    showError('Доступ к NFC запрещен. Разрешите доступ в настройках браузера.');
+                } else {
+                    showError('Ошибка NFC: ' + error.message);
+                }
             }
         }
 
@@ -292,36 +325,67 @@
             processPayment('Тестовая карта ****1234');
         }
 
-        function processPayment(cardData) {
-            // Симуляция обработки платежа
-            document.getElementById('terminalDisplay').innerHTML = 
-                '<p>✅ Платеж принят!</p>' +
-                '<p class="amount">100.00 ₽</p>' +
-                '<p>Карта: ' + cardData + '</p>' +
-                '<div class="success">🎉 Операция завершена</div>' +
-                '<button onclick="resetTerminal()">🔄 Новый платеж</button>';
+        function processPayment(cardInfo) {
+            updateDisplay('✅', 'Платеж выполнен!', currentAmount.toFixed(2) + ' ₽');
+            
+            // Показываем кнопку сброса
+            document.getElementById('nfcScanBtn').style.display = 'none';
+            document.getElementById('testPaymentBtn').style.display = 'none';
+            document.getElementById('resetBtn').style.display = 'flex';
+            document.getElementById('nfcInstructions').style.display = 'none';
+            hideError();
             
             // Добавляем в историю
-            addToPaymentLog('✅ Платеж 100.00 ₽ | ' + new Date().toLocaleTimeString());
+            addToPaymentLog(currentAmount, cardInfo);
         }
 
         function resetTerminal() {
-            document.getElementById('terminalDisplay').innerHTML = 
-                '<p>✅ Терминал готов</p>' +
-                '<p class="amount">0.00 ₽</p>' +
-                '<button onclick="startPayment()">💸 Начать прием платежа</button>';
+            updateDisplay('💳', 'Готов к работе', '0.00 ₽');
+            document.getElementById('startPaymentBtn').style.display = 'flex';
+            document.getElementById('nfcScanBtn').style.display = 'none';
+            document.getElementById('testPaymentBtn').style.display = 'flex';
+            document.getElementById('resetBtn').style.display = 'none';
+            document.getElementById('nfcInstructions').style.display = 'none';
+            hideError();
         }
 
-        function addToPaymentLog(message) {
+        function updateDisplay(icon, message, amount) {
+            document.getElementById('statusIcon').textContent = icon;
+            document.getElementById('statusMessage').textContent = message;
+            document.getElementById('amountDisplay').textContent = amount;
+        }
+
+        function addToPaymentLog(amount, cardInfo) {
             const log = document.getElementById('paymentLog');
-            const entry = document.createElement('div');
-            entry.textContent = message;
-            entry.style.padding = '5px';
-            entry.style.borderBottom = '1px solid #333';
-            log.appendChild(entry);
+            const transaction = document.createElement('div');
+            transaction.className = 'transaction-item';
+            
+            const now = new Date();
+            const timeString = now.getHours().toString().padStart(2, '0') + ':' + 
+                             now.getMinutes().toString().padStart(2, '0');
+            
+            transaction.innerHTML = `
+                <div>
+                    <div>${cardInfo}</div>
+                    <div class="transaction-time">${timeString}</div>
+                </div>
+                <div class="transaction-amount">+${amount.toFixed(2)} ₽</div>
+            `;
+            
+            log.insertBefore(transaction, log.firstChild);
         }
 
-        // Запускаем при загрузке
+        function showError(message) {
+            const errorContainer = document.getElementById('errorContainer');
+            errorContainer.innerHTML = `<div class="error-message">${message}</div>`;
+            errorContainer.style.display = 'block';
+        }
+
+        function hideError() {
+            document.getElementById('errorContainer').style.display = 'none';
+        }
+
+        // Инициализация при загрузке
         window.onload = checkDevice;
     </script>
 </body>

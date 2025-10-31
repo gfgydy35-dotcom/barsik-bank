@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Барсик-Банк</title>
+    <style>
+        body { 
+            font-family: Arial; 
+            margin: 0; 
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        
+        /* Интерфейс для КОМПЬЮТЕРА */
+        .computer-interface {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            background: #1e3a8a;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .card-creator {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        /* Интерфейс для ТЕЛЕФОНА */
+        .phone-interface {
+            display: none;
+            padding: 10px;
+        }
+        
+        .terminal {
+            background: black;
+            color: lime;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: monospace;
+            min-height: 300px;
+        }
+    </style>
+</head>
+<body>
+    <!-- КОМПЬЮТЕРНЫЙ интерфейс -->
+    <div class="computer-interface" id="computerInterface">
+        <div class="header">
+            <h1>🏦 Барсик-Банк (Админ-панель)</h1>
+            <p>Создавайте карты и управляйте платежами</p>
+        </div>
+        
+        <div class="card-creator">
+            <h2>🎨 Создать новую карту</h2>
+            <input type="text" id="cardName" placeholder="Название карты">
+            <button onclick="createCard()">Создать карту</button>
+            <div id="cardsList"></div>
+        </div>
+        
+        <div class="transactions">
+            <h2>📋 История операций</h2>
+            <div id="transactionsList"></div>
+        </div>
+    </div>
+
+    <!-- ТЕЛЕФОННЫЙ интерфейс (терминал) -->
+    <div class="phone-interface" id="phoneInterface">
+        <div class="terminal">
+            <h2>💳 Терминал Барсик-Банка</h2>
+            <div id="terminalDisplay">
+                <p>Готов к работе</p>
+                <p class="amount">0.00 ₽</p>
+            </div>
+            <button onclick="startPayment()">💸 Начать прием платежа</button>
+            <div id="paymentLog"></div>
+        </div>
+    </div>
+
+    <script>
+        // Определяем устройство при загрузке
+        function checkDevice() {
+            const isPhone = /Android|iPhone|iPad/i.test(navigator.userAgent);
+            
+            if (isPhone) {
+                document.getElementById('computerInterface').style.display = 'none';
+                document.getElementById('phoneInterface').style.display = 'block';
+                console.log('Запущен режим ТЕРМИНАЛА на телефоне');
+            } else {
+                document.getElementById('computerInterface').style.display = 'block';
+                document.getElementById('phoneInterface').style.display = 'none';
+                console.log('Запущен режим АДМИНА на компьютере');
+            }
+        }
+        
+        // Функции для КОМПЬЮТЕРА
+        function createCard() {
+            const cardName = document.getElementById('cardName').value;
+            if (!cardName) return;
+            
+            alert('Карта "' + cardName + '" создана!');
+            document.getElementById('cardName').value = '';
+        }
+        
+        // Функции для ТЕЛЕФОНА
+        function startPayment() {
+            document.getElementById('terminalDisplay').innerHTML = 
+                '<p>💳 Приложите карту</p><p class="amount">100.00 ₽</p>';
+        }
+        
+        // Запускаем при загрузке
+        window.onload = checkDevice;
+    </script>
+</body>
+</html>
